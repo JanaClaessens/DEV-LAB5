@@ -12,6 +12,12 @@ async function getAll(req, res){
     res.json(response)
 }
 
+async function getById(req, res){
+    let id = req.params.id
+    let message = await Message.findById(id);
+    res.send(id)
+}
+
 function create(req, res){
     let message = new Message();
     message.user = req.body.user;
@@ -38,4 +44,5 @@ function create(req, res){
 }
 
 module.exports.getAll = getAll
+module.exports.getById = getById
 module.exports.create = create
