@@ -9,6 +9,7 @@ const mongoose = require('mongoose');
 mongoose.connect(mongodbUrl);
 
 app.set('view engine', 'pug')
+app.set('views', __dirname + '/views');
 // add json body parser
 app.use(express.json());
 app.use("/api/v1/messages", messageRouter);
