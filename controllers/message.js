@@ -77,7 +77,7 @@ async function create(req, res){
     }catch(err){
         let response = {
             status : "error",
-            message : "Error creating message"
+            message :  "Error creating message: " + err.message
         }
         // Zet status code naar 400 dat betekent algemene fout door de client
         res.status(400).json(response);
@@ -86,29 +86,47 @@ async function create(req, res){
 
 async function deleteById(req, res) {
     let messageId = req.params.id;
-    let result = await Message.deleteOne({ _id: messageId });
-    let response = {
-        status : "success",
-        data: result
+    try {
+        let result = await Message.deleteOne({ _id: messageId });
+        let response = {
+            status: "success",
+            data: result
+        }
+        res.json(response);
+    }catch(err){
+        let response = {
+            status : "error",
+            message :  "Error deleting message: " + err.message
+        }
+        // Zet status code naar 400 dat betekent algemene fout door de client
+        res.status(400).json(response);
     }
-    res.json(response);
 }
 
 async function updateById(req, res){
     let messageId = req.params.id;
     let bodyMessage = req.body.message
 
-    // Rename .text naar .message voor screenshots te laten kloppen
-    let newMessage = {
-        user: bodyMessage.user,
-        message: bodyMessage.text
+    try{
+        // Rename .text naar .message voor screenshots te laten kloppen
+        let newMessage = {
+            user: bodyMessage.user,
+            message: bodyMessage.text
+        }
+        let result = await Message.findByIdAndUpdate(messageId, newMessage)
+        let response = {
+            status : "success",
+            data: result
+        }
+        res.json(response);
+    }catch(err){
+        let response = {
+            status : "error",
+            message : "Error updating message: " + err.message
+        }
+        // Zet status code naar 400 dat betekent algemene fout door de client
+        res.status(400).json(response);
     }
-    let result = await Message.findByIdAndUpdate(messageId, newMessage)
-    let response = {
-        status : "success",
-        data: result
-    }
-    res.json(response);
 }
 
 // Maak beschikbaar als je deze module importeert
