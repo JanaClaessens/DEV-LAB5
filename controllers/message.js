@@ -105,7 +105,9 @@ async function deleteById(req, res) {
 
 async function updateById(req, res){
     let messageId = req.params.id;
-    let bodyMessage = req.body.message
+    // als er geen message meegegeven werd, een leeg object geven ipv undefined
+    // om error op te lossen
+    let bodyMessage = req.body.message || {}
 
     try{
         // Rename .text naar .message voor screenshots te laten kloppen
